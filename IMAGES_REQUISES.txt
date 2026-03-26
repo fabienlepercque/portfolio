@@ -1,0 +1,8 @@
+Images à ajouter à la racine de ce dépôt avant de pousser :
+
+- banner.png       → Bandeau IoT (en-tête du site)
+- soundgrabber.png → Photo du prototype SoundGrabber
+- dbflash.png      → Miniature du projet dBFlash
+- noisescanner.png → Photo du NoiseScanner
+
+Sans ces fichiers, les emplacements correspondants seront vides ou afficheront une erreur d'image.

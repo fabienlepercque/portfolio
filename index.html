@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+            <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>IoT Lab - Fabien Lepercque</title>
+                    <style>
+                        :root {
+                            --bg-dark: #121212;
+                            --bg-light: #1e1e1e;
+                            --accent: #00d4ff;
+                            --accent-dark: #0099cc;
+                            --text: #e0e0e0;
+                            --text-secondary: #a0a0a0;
+                        }
+                        body {
+                            font-family: 'Orbitron', 'Rajdhani', sans-serif;
+                            margin: 0;
+                            padding: 0;
+                            background-color: var(--bg-dark);
+                            color: var(--text);
+                            overflow-x: hidden;
+                        }
+                        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap');
+
+                        header {
+                            padding: 3rem 0;
+                            text-align: center;
+                            background: linear-gradient(135deg, var(--bg-dark), var(--bg-light));
+                            position: relative;
+                            overflow: hidden;
+                        }
+                        .circuit-bg {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            opacity: 0.1;
+                            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="circuit" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M0,10 L20,10 M10,0 L10,20" stroke="%2300d4ff" stroke-width="0.5" fill="none"/></pattern></defs><rect width="100" height="100" fill="url(%23circuit)"/></svg>');
+                        }
+                        .hero-title {
+                            font-size: 4rem;
+                            margin: 0;
+                            /*background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+                             -webkit-background-clip: text;
+                             background-clip: text;
+                             color: transparent;*/
+                            color: var(--text);
+                            /*animation: glow 2s ease-in-out infinite alternate;*/
+                        }
+
+                        /* .hero-title {
+                         position: relative;
+                         display: inline-block;
+                         }
+                         .hero-title::after {
+                         content: '';
+                         position: absolute;
+                         bottom: -10px;
+                         left: 0;
+                         width: 100%;
+                         height: 3px;
+                         background: var(--accent);
+                         animation: underline 2s ease-in-out infinite;
+                         }*/
+                        @keyframes underline {
+                            0% { width: 0; }
+                            100% { width: 100%; }
+                        }
+
+                        .hero-subtitle {
+                            font-size: 1.5rem;
+                            color: var(--text-secondary);
+                            max-width: 600px;
+                            margin: 1rem auto;
+                        }
+
+
+                        @keyframes glow {
+                            from { text-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent-dark); }
+                            to { text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent-dark); }
+                        }
+                        nav {
+                            position: fixed;
+                            top: 20px;
+                            right: 20px;
+                            z-index: 100;
+                        }
+                        nav a {
+                            color: var(--text);
+                            text-decoration: none;
+                            margin: 0 10px;
+                            font-family: 'Orbitron', sans-serif;
+                            transition: color 0.3s;
+                        }
+                        nav a:hover {
+                            color: var(--accent);
+                        }
+                        section {
+                            padding: 2rem 10%;
+                        }
+                        .section-title {
+                            font-size: 2.5rem;
+                            text-align: center;
+                            margin-bottom: 2rem;
+                            color: var(--accent);
+                            position: relative;
+                        }
+                        .section-title::after {
+                            content: '';
+                            display: block;
+                            width: 100px;
+                            height: 3px;
+                            background: var(--accent);
+                            margin: 10px auto;
+                        }
+                        .projects-grid {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                            gap: 2rem;
+                            margin-top: 1rem;
+                        }
+                        .project-card {
+                            background: var(--bg-light);
+                            border-radius: 8px;
+                            overflow: hidden;
+                            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+                            transition: transform 0.3s, box-shadow 0.3s;
+                        }
+                        .project-card:hover {
+                            transform: translateY(-10px);
+                            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2);
+                        }
+                        .project-image {
+                            width: 100%;
+                            height: 200px;
+                            object-fit: cover;
+                            filter: grayscale(30%);
+                            transition: filter 0.3s;
+                        }
+                        .project-card:hover .project-image {
+                            filter: grayscale(0);
+                        }
+                        .project-content {
+                            padding: 1.5rem;
+                        }
+                        .project-content h3 {
+                            color: var(--accent);
+                            margin-top: 0;
+                        }
+                        .skills-container {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                            gap: 1.5rem;
+                        }
+                        .skill-card {
+                            background: var(--bg-light);
+                            padding: 2rem;
+                            border-radius: 8px;
+                            text-align: center;
+                            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                            transition: background 0.3s;
+                        }
+                        .skill-card:hover {
+                            background: var(--accent-dark);
+                        }
+                        .skill-icon {
+                            font-size: 3rem;
+                            color: var(--accent);
+                            margin-bottom: 1rem;
+                        }
+                        .contact-form {
+                            max-width: 600px;
+                            margin: 0 auto;
+                            background: var(--bg-light);
+                            padding: 2rem;
+                            border-radius: 8px;
+                            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+                        }
+                        .contact-form input,
+                        .contact-form textarea {
+                            width: 100%;
+                            padding: 1rem;
+                            margin: 0.5rem 0;
+                            border: none;
+                            border-radius: 4px;
+                            background: var(--bg-dark);
+                            color: var(--text);
+                            border: 1px solid var(--accent-dark);
+                        }
+                        .contact-form button {
+                            background: var(--accent);
+                            color: var(--bg-dark);
+                            border: none;
+                            padding: 1rem 2rem;
+                            font-size: 1rem;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            transition: background 0.3s;
+                            width: 100%;
+                        }
+                        .contact-form button:hover {
+                            background: var(--accent-dark);
+                        }
+                        footer {
+                            text-align: center;
+                            padding: 2rem;
+                            background: var(--bg-dark);
+                            color: var(--text-secondary);
+                        }
+                        .social-links {
+                            margin: 1rem 0;
+                        }
+                        .social-links a {
+                            color: var(--accent);
+                            font-size: 1.5rem;
+                            margin: 0 10px;
+                            transition: transform 0.3s;
+                        }
+                        .social-links a:hover {
+                            transform: scale(1.2);
+                        }
+                        /*
+                         @keyframes float {
+                         0% { transform: translateY(0); }
+                         50% { transform: translateY(-10px); }
+                         100% { transform: translateY(0); }
+                         }
+                         .project-card {
+                         animation: float 3s ease-in-out infinite;
+                         }
+                         .project-card:nth-child(2) {
+                         animation-delay: 0.5s;
+                         }
+                         .project-card:nth-child(3) {
+                         animation-delay: 1s;
+                         }*/
+                        /* Bandeau IoT */
+                        .iot-banner-container {
+                            width: 100%;
+                            max-width: 800px;
+                            margin: 2rem auto;
+                            text-align: center;
+                            padding: 0 1rem;
+                        }
+                        .iot-banner-image {
+                            width: 100%;
+                            height: auto;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+                            background: rgba(0, 0, 0, 0.3);
+                            padding: 1rem;
+                        }
+                        .iot-banner-caption {
+                            color: var(--text-secondary);
+                            font-style: italic;
+                            margin-top: 0.5rem;
+                            font-size: 0.9rem;
+                        }
+                        /* Badge "En développement" */
+                        .project-status {
+                            position: absolute;
+                            top: 10px;
+                            right: 10px;
+                            background: rgba(255, 165, 0, 0.9); /* Orange pour "en cours" */
+                            color: white;
+                            padding: 0.3rem 0.8rem;
+                            border-radius: 20px;
+                            font-size: 0.8rem;
+                            font-weight: bold;
+                            z-index: 10;
+                        }
+
+                        /* Tags technologies */
+                        .tech-tag {
+                            display: inline-block;
+                            background: var(--bg-light);
+                            color: var(--accent);
+                            padding: 0.2rem 0.5rem;
+                            border-radius: 4px;
+                            margin: 0.2rem;
+                            font-size: 0.8rem;
+                            border: 1px solid var(--accent);
+                        }
+
+                        /* Note en italique */
+                        .project-note {
+                            font-style: italic;
+                            color: var(--text-secondary);
+                            font-size: 0.9rem;
+                            margin-top: 1rem;
+                        }
+                        /* Conteneur du lien de la miniature */
+                        .project-thumbnail-link {
+                            display: block;
+                            position: relative;
+                            border-radius: 8px;
+                            overflow: hidden;
+                            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+                            transition: transform 0.3s, box-shadow 0.3s;
+                            background: white; /* Fond blanc pour les miniatures sombres */
+                            padding: 3px; /* Bordure interne pour le contraste */
+                        }
+
+                        /* Style de la miniature */
+                        .project-thumbnail {
+                            width: 100%;
+                            height: auto;
+                            display: block;
+                            border-radius: 5px;
+                            border: 2px solid rgba(255, 255, 255, 0.2); /* Bordure claire */
+                        }
+
+                        /* Effet de survol */
+                        .project-thumbnail-link:hover {
+                            transform: translateY(-5px);
+                            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+                        }
+
+                        /* Overlay au survol (optionnel) */
+                        .thumbnail-overlay {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+                            color: white;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            opacity: 0;
+                            transition: opacity 0.3s;
+                            border-radius: 5px;
+                        }
+
+                        .project-thumbnail-link:hover .thumbnail-overlay {
+                            opacity: 1;
+                        }
+
+                        /* Style du texte de l'overlay */
+                        .thumbnail-overlay i {
+                            margin-right: 0.5rem;
+                        }
+
+                        /* Conteneur principal des projets */
+                        .projects-container {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 2rem;
+                            margin: 2rem 0;
+                        }
+
+                        /* Chaque colonne (50% de largeur sur desktop) */
+                        .project-column {
+                            flex: 1;
+                            min-width: 300px; /* Largeur minimale pour les mobiles */
+                        }
+
+                        /* Sur desktop : 2 colonnes de même largeur */
+                        @media (min-width: 900px) {
+                            .project-column {
+                                flex: 0 0 calc(50% - 1rem); /* 50% moins la moitié du gap */
+                            }
+                        }
+
+                        /* Cartes de projet (style existant) */
+                        .project-card {
+                            background: var(--bg-light);
+                            border-radius: 8px;
+                            overflow: hidden;
+                            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+                            margin-bottom: 2rem; /* Espacement entre les projets empilés */
+                            transition: transform 0.3s, box-shadow 0.3s;
+                        }
+
+                        .project-card:hover {
+                            transform: translateY(-5px);
+                            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2);
+                        }
+
+                        /* Conteneur pour centrer la miniature */
+                        .thumbnail-center-container {
+                            display: flex;
+                            justify-content: center; /* Centre horizontalement */
+                            align-items: center; /* Centre verticalement (si nécessaire) */
+                            margin: 1rem 0;
+                        }
+
+                        /* Miniatures cliquables */
+                        .project-thumbnail-link {
+                            display: block;
+                            position: relative;
+                            margin: 1rem 0;
+                            border-radius: 8px;
+                            overflow: hidden;
+                            background: white;
+                            padding: 3px;
+                        }
+
+                        .project-thumbnail-link {
+                            display: inline-block; /* Permet de centrer avec margin auto */
+                            max-width: 200px; /* Limite la largeur du conteneur */
+                            margin: 0 auto; /* Centre le conteneur */
+                        }
+
+                        .project-thumbnail {
+                            width: 100%; /* Remplit le conteneur parent (limité à 300px) */
+                            height: auto;
+                        }
+
+                        /* Overlay au survol */
+                        .thumbnail-overlay {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            background: rgba(0, 0, 0, 0.7);
+                            color: white;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            opacity: 0;
+                            transition: opacity 0.3s;
+                        }
+
+                        /* Miniatures dans la galerie */
+                        .gallery-thumbnail {
+                            width: 100%;
+                            height: 150px;
+                            object-fit: cover;
+                            border-radius: 8px; /* Arrondis de 8px */
+                            border: 1px solid rgba(255, 255, 255, 0.2);
+                        }
+
+
+                        .project-thumbnail-link:hover .thumbnail-overlay {
+                            opacity: 1;
+                        }
+
+                        /* Image avec arrondi */
+                        .rounded-image {
+
+                            float: center; /* Positionne le conteneur à gauche */
+                            border-radius: 10px; /* Arrondi de 10 pixels */
+                            display: block; /* Évite les espaces indésirables sous l'image */
+                            margin: 0 auto; /* Centre l'image */
+                            max-width: 200px; /* Largeur maximale pour éviter qu'elle ne prenne toute la largeur */
+                            height: auto; /* Conserve les proportions */
+                        }
+
+                        .rounded-image-2 {
+                            border-radius: 10px; /* Arrondi de 10 pixels */
+                            display: block; /* Évite les espaces indésirables sous l'image */
+                            margin: 0 auto; /* Centre l'image */
+                            max-width: 600px; /* Largeur maximale pour éviter qu'elle ne prenne toute la largeur */
+                            height: auto; /* Conserve les proportions */
+                        }
+
+                        /* CSS pour Flexbox et arrondis */
+                        .images-side-by-side {
+                            display: flex;
+                            gap: 1rem;
+                            justify-content: center;
+                            margin: 1rem 0;
+                        }
+
+                        .image-container {
+                            flex: 1;
+                            max-width: calc(50% - 0.5rem);
+                            background: white;
+                            padding: 10px;
+                            border-radius: 12px;
+                            text-align: center;
+                        }
+
+                        .rounded-image {
+                            width: 100%;
+                            height: 200px; /* Hauteur fixe pour uniformité */
+                            object-fit: cover;
+                            border-radius: 10px;
+                        }
+
+                        .image-caption {
+                            font-size: 0.8rem;
+                            color: var(--text-secondary);
+                            margin-top: 0.5rem;
+                        }
+
+                        /* Responsive */
+                        @media (max-width: 768px) {
+                            .images-side-by-side {
+                                flex-direction: column;
+                                align-items: center;
+                            }
+                            .image-container {
+                                max-width: 100%;
+                            }
+                        }
+
+                        /* Conteneur de l'image et de la légende */
+                        .image-container {
+                            text-align: center; /* Centre le texte et les éléments inline */
+                            max-width: 200px;
+                            margin: 1rem auto;
+                            background: white;
+                            padding: 10px;
+                            border-radius: 12px;
+                        }
+
+                        /* Style de l'image */
+                        .rounded-image {
+                            border-radius: 10px;
+                            display: block;
+                            max-width: 100%;
+                            height: auto;
+                        }
+
+                        /* Style de la légende */
+                        .image-caption {
+                            font-size: 0.8rem;
+                            color: var(--text-secondary);
+                            margin-top: 0.5rem;
+                        }
+
+                        .project-description {
+                            text-align: center;
+                            max-width: 600px;
+                            margin: 0 auto;
+                        }
+
+                        /* Sections du projet */
+                        .project-section {
+                            margin: 1rem 0;
+                        }
+
+                        /* Titre des sections */
+                        .project-section h4 {
+                            margin: 0 0 0.5rem 0;
+                            color: var(--text);
+                            font-size: 1rem;
+                            display: flex;
+                            align-items: center;
+                        }
+
+                        .project-section h4 i {
+                            margin-right: 0.5rem;
+                            color: var(--accent);
+                        }
+
+                        /* Conteneur des tags */
+                        .tags {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 0.5rem;
+                        }
+
+                        /* Style des tags */
+                        .tag {
+                            padding: 0.3rem 0.6rem;
+                            border-radius: 20px;
+                            font-size: 0.8rem;
+                            font-weight: 500;
+                        }
+
+                        /* Tags pour les technologies */
+                        .tag.tech {
+                            background: rgba(0, 212, 255, 0.2);
+                            border: 1px solid rgba(0, 212, 255, 0.3);
+                            color: var(--accent);
+                        }
+
+                        /* Tags pour les compétences */
+                        .tag.skill {
+                            background: rgba(150, 255, 150, 0.2);
+                            border: 1px solid rgba(150, 255, 150, 0.3);
+                            color: #2ecc71;
+                        }
+                        /* Section Compétences */
+                        #skills {
+                            padding: 3rem 0;
+                            background: var(--bg-dark);
+                        }
+
+                        .section-title {
+                            text-align: center;
+                            margin-bottom: 2rem;
+                            color: var(--text);
+                            font-size: 1.8rem;
+                        }
+
+                        /* Section Compétences */
+                        #skills {
+                            padding: 3rem 0;
+                            background: var(--bg-dark);
+                        }
+
+                        .section-title {
+                            text-align: center;
+                            margin-bottom: 2rem;
+                            color: var(--text);
+                            font-size: 1.8rem;
+                        }
+
+                        /* Conteneur des catégories */
+                        .skills-container {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                            gap: 2rem;
+                            max-width: 1200px;
+                            margin: 0 auto;
+                            padding: 0 1rem;
+                        }
+
+                        /* Catégorie de compétence */
+                        .skill-category {
+                            background: var(--bg-light);
+                            padding: 1.5rem;
+                            border-radius: 10px;
+                            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                        }
+
+                        .skill-category h3 {
+                            margin: 0 0 1rem 0;
+                            color: var(--text);
+                            font-size: 1.2rem;
+                            display: flex;
+                            align-items: center;
+                        }
+
+                        .skill-category h3 i {
+                            margin-right: 0.75rem;
+                            color: var(--accent);
+                        }
+
+                        /* Conteneur des tags */
+                        .skill-tags {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 0.5rem;
+                        }
+
+                        /* Style des tags */
+                        .skill-tag {
+                            padding: 0.4rem 0.8rem;
+                            border-radius: 20px;
+                            font-size: 0.9rem;
+                            font-weight: 500;
+                            transition: transform 0.2s;
+                        }
+
+                        .skill-tag:hover {
+                            transform: translateY(-2px);
+                        }
+
+                        /* Couleurs par catégorie */
+                        .skill-tag.language {
+                            background: rgba(255, 165, 0, 0.2);
+                            border: 1px solid rgba(255, 165, 0, 0.3);
+                            color: #ffa500; /* Orange */
+                        }
+
+                        .skill-tag.methodology {
+                            background: rgba(255, 215, 0, 0.2);
+                            border: 1px solid rgba(255, 215, 0, 0.3);
+                            color: #ffd700; /* Or */
+                        }
+
+                        .skill-tag.target {
+                            background: rgba(100, 100, 255, 0.2);
+                            border: 1px solid rgba(100, 100, 255, 0.3);
+                            color: #6464ff; /* Bleu foncé */
+                        }
+
+                        .skill-tag.iot {
+                            background: rgba(0, 212, 255, 0.2);
+                            border: 1px solid rgba(0, 212, 255, 0.3);
+                            color: var(--accent); /* Bleu */
+                        }
+
+                        .skill-tag.skill {
+                            background: rgba(150, 255, 150, 0.2);
+                            border: 1px solid rgba(150, 255, 150, 0.3);
+                            color: #2ecc71; /* Vert */
+                        }
+
+                        /* Responsive : 1 colonne sur mobile */
+                        @media (max-width: 768px) {
+                            .skills-container {
+                                grid-template-columns: 1fr;
+                            }
+                        }
+
+                        /* Section Compétences */
+                        #skills {
+                            padding: 3rem 0;
+                            background: var(--bg-dark);
+                        }
+
+                        .section-title {
+                            text-align: center;
+                            margin-bottom: 2rem;
+                            color: var(--text);
+                            font-size: 1.8rem;
+                        }
+
+                        /* Conteneur des catégories */
+                        .skills-container {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                            gap: 2rem;
+                            max-width: 1200px;
+                            margin: 0 auto;
+                            padding: 0 1rem;
+                        }
+
+                        /* Catégorie de compétence */
+                        .skill-category {
+                            background: var(--bg-light);
+                            padding: 1.5rem;
+                            border-radius: 10px;
+                            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                        }
+
+                        .skill-category h3 {
+                            margin: 0 0 1rem 0;
+                            color: var(--text);
+                            font-size: 1.2rem;
+                            display: flex;
+                            align-items: center;
+                        }
+
+                        .skill-category h3 i {
+                            margin-right: 0.75rem;
+                            color: var(--accent);
+                        }
+
+                        /* Conteneur des tags */
+                        .skill-tags {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 0.5rem;
+                        }
+
+                        /* Style des tags */
+                        .skill-tag {
+                            padding: 0.4rem 0.8rem;
+                            border-radius: 20px;
+                            font-size: 0.9rem;
+                            font-weight: 500;
+                            transition: transform 0.2s;
+                        }
+
+                        .skill-tag:hover {
+                            transform: translateY(-2px);
+                        }
+
+                        /* Couleurs par catégorie */
+                        .skill-tag.language {
+                            background: rgba(255, 165, 0, 0.2);
+                            border: 1px solid rgba(255, 165, 0, 0.3);
+                            color: #ffa500; /* Orange */
+                        }
+
+                        .skill-tag.methodology {
+                            background: rgba(255, 215, 0, 0.2);
+                            border: 1px solid rgba(255, 215, 0, 0.3);
+                            color: #ffd700; /* Or */
+                        }
+
+                        .skill-tag.target {
+                            background: rgba(100, 100, 255, 0.2);
+                            border: 1px solid rgba(100, 100, 255, 0.3);
+                            color: #6464ff; /* Bleu foncé */
+                        }
+
+                        .skill-tag.iot {
+                            background: rgba(0, 212, 255, 0.2);
+                            border: 1px solid rgba(0, 212, 255, 0.3);
+                            color: var(--accent); /* Bleu */
+                        }
+
+                        .skill-tag.skill {
+                            background: rgba(150, 255, 150, 0.2);
+                            border: 1px solid rgba(150, 255, 150, 0.3);
+                            color: #2ecc71; /* Vert */
+                        }
+
+                        /* Responsive : 1 colonne sur mobile */
+                        @media (max-width: 768px) {
+                            .skills-container {
+                                grid-template-columns: 1fr;
+                            }
+                        }
+
+                    </style>
+                </head>
+    <body>
+
+        <!-- Bandeau IoT -->
+        <div class="iot-banner-container">
+            <img src="banner.png" alt="Processus IoT : Capteurs → Signal → Réseau → Cloud" class="iot-banner-image">
+                <p class="iot-banner-caption">Mon processus IoT : de l'acquisition des données à leur analyse dans le cloud.</p>
+        </div>
+
+        <div class="circuit-bg"></div>
+        <header>
+            <nav>
+                <a href="#projects">Projets</a>
+                <a href="#skills">Compétences</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <h1 class="hero-title">Fabien Lepercque</h1>
+            <div class="project-description">
+                <p class="hero-subtitle">Développeur de solutions innovantes - fullstack <br>
+                Je conçois des solutions connectées intelligentes, du prototypage matériel (Raspberry Pi like) à l’architecture logicielle complète (backend/frontend), en passant par l’intégration sur infrastructure sécurisée.<br>
+                Mon expertise ? Transformer des idées en systèmes embarqués robustes, sécurisés et scalables – pour connecter le monde physique au numérique, avec précision et innovation."
+                </p>
+        </header>
+
+        <!-- Section Projets (déplacée en haut) -->
+
+        <!-- Section Projets avec 2 colonnes -->
+        <section id="projects">
+            <!--            <h2 class="section-title">Mes Projets IoT</h2>-->
+            <div class="projects-container">
+                <!-- Colonne 1 : SoundGrabber (pleine hauteur) -->
+                <div class="project-column">
+                    <div class="project-card">
+<!--                        <div class="project-status">🚧 En développement</div>-->
+                        <!--                        <img src="https://via.placeholder.com/600x400/00d4ff/ffffff?text=Noise+Grabber" alt="Noise Grabber - Capture audio intelligente" class="project-image">-->
+                        <div class="project-content">
+                            <h3>Noise Grabber</h3>
+                            <p><strong>Projet personnel en cours</strong> : Un système intelligent de <strong>capture et analyse de bruits environnementaux</strong>, conçu pour surveiller et géolocaliser des capteurs de mesure (acoustique, vibrations...)</p>
+
+                            <div class="project-section">
+                                <h4><i class="fas fa-code"></i> Technologies</h4>
+                                <div class="tags">
+                                    <span class="tech-tag">Raspberry Pi</span>
+                                    <span class="tech-tag">C/C++</span>
+                                    <span class="tech-tag">RUST</span>
+                                    <span class="tech-tag">React.js</span>
+                                    <span class="tech-tag">Android</span>
+                                    <span class="tech-tag">Docker</span>
+                                    <span class="tech-tag">MQTTS</span>
+                                    <span class="tech-tag">Mosquitto</span>
+                                    <span class="tech-tag">Telegraf</span>
+                                    <span class="tech-tag">Influxdb (SQL)</span>
+                                    <span class="tech-tag">Dashboard (Grafana)</span>
+                                </div>
+                            </div>
+
+
+                            <!-- Compétences Métiers -->
+                            <div class="project-section">
+                                <h4><i class="fas fa-lightbulb"></i> Compétences Métiers</h4>
+                                <div class="tags">
+                                    <span class="tag skill">Acoustique</span>
+                                    <span class="tag skill">Traitement du signal</span>
+                                </div>
+                            </div>
+
+                            <p><strong>Statut</strong>
+                            <ul>
+                                <li>✅ Prototype base SoundAnalysis iOS</li>
+                                <li>✅ Broker</li>
+                                <li>✅ Base de données</li>
+                                <li>✅ Dashboard Grafana</li>
+                                <li>🚧 Prototype base Raspberry Pi en cours de développement...</li>
+                            </ul>
+                            </p>
+
+                            <p><strong>Objectifs :</strong>
+                            <ul>
+                                <li>Capture en temps réel des nuisances sonores.</li>
+                                <li>Analyse et classification des bruits (ex: klaxons, cris, machines).</li>
+                                <li>Visualisation des données via un dashboard.</li>
+                            </ul>
+                            </p>
+
+                            <div class="project-media">
+                                <!-- Image optimisée (800px de large, < 150 Ko) -->
+                                <img src="images/soundgrabber.png"
+                                    alt="SoundGrabber"
+                                    class="rounded-image-2"
+                                    loading="lazy"> <!-- Chargement différé pour améliorer les performances -->
+                                    <p class="image-caption">SoundGrabber</p>
+                            </div>
+
+                            <!--                                <p class="project-note"><em>En cours de développement...</em></p>-->
+                        </div>
+                    </div>
+
+                    <!-- Projet NoiseScanner -->
+                    <div class="project-card">
+                        <!--                        <img src="https://via.placeholder.com/600x400/00d4ff/ffffff?text=SoundAnalysis" alt="Real time sound analyser" class="project-image">-->
+                        <div class="project-content">
+                            <h3>NoiseScanner - Decibel d'Or 2014 - Brevet FR3018023</h3>
+                            <p>Outil embarqué de localisation de sources de bruit</p>
+                            <p><strong>Technologies</strong>
+
+                            <div class="project-section">
+                                <h4><i class="fas fa-code"></i> Technologies</h4>
+                                <div class="tags">
+                                    <span class="tech-tag">Linux Embarqué,</span>
+                                    <span class="tech-tag">C/C++, Qt</span>
+                                    <span class="tech-tag">Capture audio - micro MEMS</span>
+                                    <span class="tech-tag">Traitement du signal</span>
+                                </div>
+                            </div>
+
+                            <!-- Compétences Métiers -->
+                            <div class="project-section">
+                                <h4><i class="fas fa-lightbulb"></i> Compétences Métiers</h4>
+                                <div class="tags">
+                                    <span class="tag skill">Acoustique</span>
+                                    <span class="tag skill">Traitement du signal</span>
+                                    <span class="tag skill">Optimisation algorithmique</span>
+                                </div>
+                            </div>
+
+                            <div class="rounded-image-container">
+                                <img src="images/noisescanner.png"
+                                    alt="NoiseScanner"
+                                    class="rounded-image-2">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Colonne 2 : NoiseScanner + dBFlash (empilés) -->
+                <div class="project-column">
+
+                    <!-- Projet SoundAnalysis -->
+                    <div class="project-card">
+                        <!--                        <img src="https://via.placeholder.com/600x400/00d4ff/ffffff?text=NoiseScanner" alt="Projet SoundAnalysis" class="project-image">-->
+                        <div class="project-content">
+                            <h3>SoundAnalysis - App iOS</h3>
+                            <p>Analyseur de spectre et mesure du bruit temps réel pour iphone (en cours de déploiement)</p>
+
+                            <div class="project-section">
+                                <h4><i class="fas fa-code"></i> Technologies</h4>
+                                <div class="tags">
+                                    <span class="tech-tag">Plateforme iOS</span>
+                                    <span class="tech-tag">Swift</span>
+                                    <span class="tech-tag">Objective-c</span>
+                                    <span class="tech-tag">Traitement du signal</span>
+                                </div>
+                            </div>
+
+                            <!-- Compétences Métiers -->
+                            <div class="project-section">
+                                <h4><i class="fas fa-lightbulb"></i> Compétences Métiers</h4>
+                                <div class="tags">
+                                    <span class="tag skill">Acoustique</span>
+                                    <span class="tag skill">Traitement du signal</span>
+                                </div>
+                            </div>
+
+                            <p><strong>Statut</strong>
+                            <ul>
+                                <li>✅ Version gratuite SoundAnalysis iOS</li>
+                                <li>🚧 En cours de déploiment sur Apple Store...</li>
+                            </ul>
+                            </p>
+
+                            <div class="rounded-image-container">
+                                <img src="images/soundanalysis-octave-view.png"
+                                    alt="Logo dB Flash"
+                                    class="rounded-image-2">
+                            </div>
+
+                            <!--                                <div class="images-side-by-side">-->
+                            <!--                                    <div class="image-container">-->
+                            <!--                                        <img src="soundanalysis-octave-view.png" alt="Circuit dB Flash" class="rounded-image">-->
+                            <!--                                        <p class="image-caption">Analyse en 1/3 Octave</p>-->
+                            <!--                                    </div>-->
+                            <!--                                    <div class="image-container">-->
+                            <!--                                        <img src="sound-analysis-logo.png" alt="Logo dB Flash" class="rounded-image">-->
+                            <!--                                        <p class="image-caption">SoundAnalysis</p>-->
+                            <!--                                    </div>-->
+                            <!--                                </div>-->
+
+                            <!--                                <p class="project-note"><em>Version gratuite bientôt disponible sur Apple Store...</em></p>-->
+
+                        </div>
+                    </div>
+
+                    <!-- Projet dBFlash -->
+                    <div class="project-card">
+                        <!--                        <img src="https://via.placeholder.com/600x400/00d4ff/ffffff?text=dBFlash" alt="Radar à bruit" class="project-image">-->
+                        <div class="project-content">
+                            <h3>dBFlash, radar à bruit - Brevet FR3122254</h3>
+                            <p>
+                            Développé chez MicrodB, ce système permet de surveiller et de localiser le bruit des véhicules. J’ai contribué en tant que Chef de produit au développement (architecture logicielle, sous-traitance, marketing...) entre 2019 et 2025.
+                            </p>
+                        </div>
+
+                        <div class="project-section">
+                            <h4><i class="fas fa-code"></i> Technologies</h4>
+                            <div class="tags">
+                                <span class="tech-tag">Architecture micro-services</span>
+                                <span class="tech-tag">C/C++</span>
+                                <span class="tech-tag">OpenMP</span>
+                                <span class="tech-tag">Cuda</span>
+                                <span class="tech-tag">.NET</span>
+                                <span class="tech-tag">Python</span>
+                                <span class="tech-tag">REACT.js</span>
+                                <span class="tech-tag">SFTP</span>
+                                <span class="tech-tag">Capture audio - micro MEMS</span>
+                            </div>
+                        </div>
+
+                        <!-- Compétences Métiers -->
+                        <div class="project-section">
+                            <h4><i class="fas fa-lightbulb"></i> Compétences Métiers</h4>
+                            <div class="tags">
+                                <span class="tag skill">Acoustique</span>
+                                <span class="tag skill">Machine learning</span>
+                                <span class="tag skill">Traitement du signal</span>
+                                <span class="tag skill">Optimisation algorithmique</span>
+                            </div>
+                        </div>
+
+                        <!-- Miniature cliquable avec bordure et ombre -->
+
+                        <!-- Conteneur pour centrer la miniature -->
+                        <div class="thumbnail-center-container">
+                            <a href="https://microdb.fr/product/controle-automatique-des-vehicules-bruyants/" target="_blank" class="project-thumbnail-link">
+                                <img src="images/dbflash.png"
+                                    alt="Site dBFlash"
+                                    class="rounded-image">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="skills">
+            <h2 class="section-title">Compétences Techniques</h2>
+
+            <section id="skills">
+                <h2 class="section-title">Compétences Techniques</h2>
+                <div class="skills-container">
+                    <!-- Langages -->
+                    <div class="skill-category">
+                        <h3><i class="fas fa-file-code"></i> Langages</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag language">C/C++</span>
+                            <span class="skill-tag language">.NET</span>
+                            <span class="skill-tag language">JAVA</span>
+                            <span class="skill-tag language">OpenMP</span>
+                            <span class="skill-tag language">CUDA/OpenCL</span>
+                            <span class="skill-tag language">Python</span>
+                            <span class="skill-tag language">JavaScript</span>
+                            <span class="skill-tag language">Node.js</span>
+                            <span class="skill-tag language">REACT.js</span>
+                            <span class="skill-tag language">SQL</span>
+                        </div>
+                    </div>
+
+                    <!-- Méthodologies -->
+                    <div class="skill-category">
+                        <h3><i class="fas fa-project-diagram"></i> Méthodologies</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag methodology">Agile</span>
+                            <span class="skill-tag methodology">Scrum</span>
+                            <span class="skill-tag methodology">Kanban</span>
+                            <span class="skill-tag methodology">CI/CD</span>
+                        </div>
+                    </div>
+
+                    <!-- Réseaux IoT -->
+                    <div class="skill-category">
+                        <h3><i class="fas fa-network-wired"></i> Cloud & Data</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag iot">MQTT</span>
+                            <span class="skill-tag iot">SFTP</span>
+                            <span class="skill-tag iot">Mosquitto</span>
+                            <span class="skill-tag iot">Telegraf</span>
+                            <span class="skill-tag iot">Grafana</span>
+                        </div>
+                    </div>
+
+                    <!-- Plateformes Cibles -->
+                    <div class="skill-category">
+                        <h3><i class="fas fa-desktop"></i> Plateformes Cibles</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag target">Linux Embarqué</span>
+                            <span class="skill-tag target">Raspberry Pi</span>
+                            <span class="skill-tag target">Windows</span>
+                            <span class="skill-tag target">MacOS/iOS</span>
+                        </div>
+                    </div>
+
+                    <!-- Compétences métiers -->
+                    <div class="skill-category">
+                        <h3><i class="fas fa-lightbulb"></i> Compétences Métiers</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag skill">Acoustique</span>
+                            <span class="skill-tag skill">Traitement du signal</span>
+                            <span class="skill-tag skill">Machine learning</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </section>
+
+
+        <!-- Section Contact -->
+        <section id="contact">
+            <h2 class="section-title">Contactez-moi</h2>
+            <div class="contact-form">
+                <input type="text" placeholder="Fabien Lepercque" required>
+                    <input type="email" placeholder="flepercque@gmail.com" required>
+                        <textarea placeholder="Votre message (projet, collaboration, question technique...)" rows="5" required></textarea>
+                        <button type="submit">Envoyer le message</button>
+                    </div>
+            <div class="social-links">
+                <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Fabien Lepercque – Développeur IoT</p>
+        </footer>
+
+        <!-- Font Awesome pour les icônes -->
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    </body>
+</html>
+
