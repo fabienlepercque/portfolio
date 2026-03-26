@@ -796,6 +796,82 @@
                             }
                         }
 
+                        /* Section Contact */
+                        #contact {
+                            max-width: 600px;
+                            margin: 3rem auto;
+                            padding: 2rem;
+                            background: var(--bg-light);
+                            border-radius: 10px;
+                            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                        }
+
+                        #contact h2 {
+                            text-align: center;
+                            margin-bottom: 1.5rem;
+                            color: var(--text);
+                            font-size: 1.8rem;
+                        }
+
+                        /* Groupes de champs */
+                        .form-group {
+                            margin-bottom: 1.25rem;
+                        }
+
+                        .form-group label {
+                            display: block;
+                            margin-bottom: 0.5rem;
+                            color: var(--text-secondary);
+                            font-size: 0.9rem;
+                        }
+
+                        /* Champs de saisie */
+                        #contact input,
+                        #contact textarea {
+                            width: 100%;
+                            padding: 0.75rem;
+                            border: 1px solid rgba(255, 255, 255, 0.2);
+                            border-radius: 5px;
+                            background: rgba(0, 0, 0, 0.2);
+                            color: var(--text);
+                            font-size: 1rem;
+                        }
+
+                        #contact textarea {
+                            min-height: 150px;
+                            resize: vertical;
+                        }
+
+                        /* Bouton de soumission */
+                        .submit-button {
+                            width: 100%;
+                            padding: 0.75rem;
+                            background: var(--accent);
+                            color: var(--bg-dark);
+                            border: none;
+                            border-radius: 5px;
+                            font-size: 1rem;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: background 0.3s;
+                        }
+
+                        .submit-button:hover {
+                            background: rgba(0, 212, 255, 0.8);
+                        }
+
+                        /* Message de confirmation */
+                        .confirmation-message {
+                            margin-top: 1.5rem;
+                            padding: 1rem;
+                            background: rgba(0, 255, 100, 0.1);
+                            border: 1px solid rgba(0, 255, 100, 0.3);
+                            border-radius: 5px;
+                            text-align: center;
+                            color: #00ff66;
+                            font-size: 1rem;
+                        }
+
                     </style>
                 </head>
     <body>
@@ -1053,6 +1129,8 @@
                             <span class="skill-tag language">C/C++</span>
                             <span class="skill-tag language">.NET</span>
                             <span class="skill-tag language">JAVA</span>
+                            <span class="skill-tag language">RUST</span>
+                            <span class="skill-tag language">Swift</span>
                             <span class="skill-tag language">OpenMP</span>
                             <span class="skill-tag language">CUDA/OpenCL</span>
                             <span class="skill-tag language">Python</span>
@@ -1114,23 +1192,77 @@
 
 
         <!-- Section Contact -->
-        <section id="contact">
-            <h2 class="section-title">Contactez-moi</h2>
-            <div class="contact-form">
-                <input type="text" placeholder="Fabien Lepercque" required>
-                    <input type="email" placeholder="flepercque@gmail.com" required>
-                        <textarea placeholder="Votre message (projet, collaboration, question technique...)" rows="5" required></textarea>
-                        <button type="submit">Envoyer le message</button>
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Fabien Lux | Portfolio</title>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+            <link rel="stylesheet" href="style.css">
+        </head>
+        <body>
+            <!-- Votre contenu existant -->
+            <header>
+                <h1>Fabien Lepercque</h1>
+<!--                <p>Développeur IoT & Systèmes Embarqués</p>-->
+            </header>
+
+            <!-- Vos sections existantes (projets, compétences, etc.) -->
+
+            <!-- Section Contact -->
+            <section id="contact">
+                <h2>Contactez-moi</h2>
+                <form id="contact-form" action="https://formspree.io/f/mzdkzbyw" method="POST">
+                    <div class="form-group">
+                        <label for="name">Nom</label>
+                        <input type="text" id="name" name="name" placeholder="Votre nom complet" required>
                     </div>
-            <div class="social-links">
-                <a href="#" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
-                <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
-            </div>
-        </section>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Votre adresse email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Décrivez votre projet ou votre demande" required></textarea>
+                    </div>
+                    <input type="text" name="_honey" style="display: none;" tabindex="-1" autocomplete="off">
+                    <button type="submit" class="submit-button">Envoyer le message</button>
+                </form>
+                <div id="confirmation-message" class="confirmation-message" style="display: none;">
+                    <p>✅ Votre message a été envoyé avec succès !</p>
+                </div>
+            </section>
+
+            <!-- Votre footer existant -->
+
+            <script>
+                const form = document.getElementById('contact-form');
+                const confirmationMessage = document.getElementById('confirmation-message');
+
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(form);
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    if (response.ok) {
+                        confirmationMessage.style.display = 'block';
+                        form.reset();
+                    } else {
+                        alert("Une erreur est survenue. Veuillez réessayer plus tard.");
+                    }
+                });
+            </script>
+        </body>
+        </html>
 
         <footer>
-            <p>&copy; 2026 Fabien Lepercque – Développeur IoT</p>
+            <p>&copy; 2026 Fabien Lepercque</p>
         </footer>
 
         <!-- Font Awesome pour les icônes -->
